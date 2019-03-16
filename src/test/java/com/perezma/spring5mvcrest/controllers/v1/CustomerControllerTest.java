@@ -1,6 +1,8 @@
 package com.perezma.spring5mvcrest.controllers.v1;
 
 import com.perezma.spring5mvcrest.api.v1.models.CustomerDTO;
+import com.perezma.spring5mvcrest.controllers.RestResponseEntityExceptionHandler;
+import com.perezma.spring5mvcrest.exceptions.ResourceNotFoundException;
 import com.perezma.spring5mvcrest.services.CustomerService;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +39,9 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(customerController)
+                .setControllerAdvice(new RestResponseEntityExceptionHandler())
+                .build();
     }
 
     @Test
@@ -155,5 +159,15 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
         mockMvc.perform(delete(CustomerController.BASE_URL + "/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testNotFoundException() throws Exception {
+
+        when(customerService.getCustomerById(anyLong())).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(get(CustomerController.BASE_URL + "/222")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }
