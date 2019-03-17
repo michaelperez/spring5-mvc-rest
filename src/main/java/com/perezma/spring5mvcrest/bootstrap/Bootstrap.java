@@ -2,8 +2,10 @@ package com.perezma.spring5mvcrest.bootstrap;
 
 import com.perezma.spring5mvcrest.domains.Category;
 import com.perezma.spring5mvcrest.domains.Customer;
+import com.perezma.spring5mvcrest.domains.Vendor;
 import com.perezma.spring5mvcrest.repositories.CategoryRepository;
 import com.perezma.spring5mvcrest.repositories.CustomerRepository;
+import com.perezma.spring5mvcrest.repositories.VendorRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -14,18 +16,19 @@ public class Bootstrap implements CommandLineRunner {
 
     private CustomerRepository customerRepository;
 
-    public Bootstrap(CategoryRepository categoryRepository, CustomerRepository customerRepository) {
+    private VendorRepository vendorRepository;
+
+    public Bootstrap(CategoryRepository categoryRepository, CustomerRepository customerRepository, VendorRepository vendorRepository) {
         this.categoryRepository = categoryRepository;
         this.customerRepository = customerRepository;
+        this.vendorRepository = vendorRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
-
         loadCategories();
-
         loadCustomers();
-
+        loadVendors();
     }
 
     private void loadCategories() {
@@ -70,5 +73,16 @@ public class Bootstrap implements CommandLineRunner {
         customerRepository.save(customer2);
 
         System.out.println("Customers loaded = " + customerRepository.count());
+    }
+
+    private void loadVendors() {
+        Vendor vendor1 = new Vendor();
+        vendor1.setName("Western Tasty Fruits Ltd.");
+        vendorRepository.save(vendor1);
+
+        Vendor vendor2 = new Vendor();
+        vendor2.setName("Exotic Fruits Company");
+        vendorRepository.save(vendor2);
+
     }
 }
