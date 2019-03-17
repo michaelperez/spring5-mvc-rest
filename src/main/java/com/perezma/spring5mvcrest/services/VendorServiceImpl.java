@@ -3,6 +3,7 @@ package com.perezma.spring5mvcrest.services;
 import com.perezma.spring5mvcrest.api.v1.mappers.VendorMapper;
 import com.perezma.spring5mvcrest.api.v1.models.VendorDTO;
 import com.perezma.spring5mvcrest.api.v1.models.VendorListDTO;
+import com.perezma.spring5mvcrest.controllers.v1.VendorController;
 import com.perezma.spring5mvcrest.domains.Vendor;
 import com.perezma.spring5mvcrest.exceptions.ResourceNotFoundException;
 import com.perezma.spring5mvcrest.repositories.VendorRepository;
@@ -87,7 +88,7 @@ public class VendorServiceImpl implements VendorService {
     }
 
     private String getVendorUrl(Long id) {
-        return "/api/v1/vendors" + "/" + id;
+        return VendorController.BASE_URL + "/" + id;
     }
 
     private VendorDTO saveAndReturnDTO(Vendor vendor) {
